@@ -24,6 +24,7 @@ export class MaterialController {
       );
       res.json({
         message: "Materials fetched successfully",
+        chapterId: req.params.chapterId,
         materials,
       });
     } catch (error) {

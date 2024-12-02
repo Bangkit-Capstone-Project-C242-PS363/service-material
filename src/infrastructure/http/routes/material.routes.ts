@@ -7,7 +7,7 @@ export const createMaterialRoutes = (
   const router = Router();
 
   router.get("/getChapters", materialController.getChapters);
-  router.get("/getMaterials", materialController.getMaterials);
+  router.get("/getMaterials/:chapterId", materialController.getMaterials);
 
   return router;
 };
