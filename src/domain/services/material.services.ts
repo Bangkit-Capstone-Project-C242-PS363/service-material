@@ -1,5 +1,7 @@
 export class MaterialService {
+  constructor(private materialRepository: materialRepository) {}
+
   async getChapters(): Promise<string> {
-    return "Chapters fetched successfully";
+    return this.materialRepository.getChapters();
   }
 }
