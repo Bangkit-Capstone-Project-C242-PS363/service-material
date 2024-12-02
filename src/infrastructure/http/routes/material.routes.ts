@@ -1,15 +1,13 @@
 import { Router } from "express";
+import { MaterialController } from "../controllers/material.controller";
 
-export const createMaterialRoutes = (): Router => {
+export const createMaterialRoutes = (
+  materialController: MaterialController,
+): Router => {
   const router = Router();
 
-  router.get("/getChapters", (req, res) => {
-    res.send("Hello World");
-  });
-
-  router.get("/getMaterial", (req, res) => {
-    res.send("Hello World");
-  });
+  router.get("/getChapters", materialController.getChapters);
+  router.get("/getMaterial", materialController.getMaterials);
 
   return router;
 };
