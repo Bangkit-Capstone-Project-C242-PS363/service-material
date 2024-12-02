@@ -3,7 +3,11 @@ import { Router } from "express";
 export const createMaterialRoutes = (): Router => {
   const router = Router();
 
-  router.get("/getAll", (req, res) => {
+  router.get("/getChapters", (req, res) => {
+    res.send("Hello World");
+  });
+
+  router.get("/getMaterial", (req, res) => {
     res.send("Hello World");
   });
 
