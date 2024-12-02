@@ -5,10 +5,10 @@ export class MaterialController {
   constructor(private materialService: MaterialService) {}
   getChapters = async (req: Request, res: Response): Promise<void> => {
     try {
-      const materials = await this.materialService.getChapters();
+      const chapters = await this.materialService.getChapters();
       res.json({
         message: "Chapter fetched successfully",
-        materials,
+        chapters,
       });
     } catch (error) {
       res.json({
@@ -18,8 +18,18 @@ export class MaterialController {
   };
 
   getMaterials = async (req: Request, res: Response): Promise<void> => {
-    res.json({
-      message: "this is materials",
-    });
+    try {
+      const materials = await this.materialService.getMaterials(
+        req.params.chapterId,
+      );
+      res.json({
+        message: "Materials fetched successfully",
+        materials,
+      });
+    } catch (error) {
+      res.json({
+        error: error.message,
+      });
+    }
   };
 }
