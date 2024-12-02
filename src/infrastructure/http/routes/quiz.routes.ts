@@ -7,7 +7,7 @@ export const createQuizRoutes = (
   const router = Router();
 
   router.get("/getChapters", materialController.getChapters);
-  router.get("/getMaterials/:chapterId", materialController.getMaterials);
+  router.get("/getQuizz/:chapterId", materialController.getQuizz);
 
   return router;
 };

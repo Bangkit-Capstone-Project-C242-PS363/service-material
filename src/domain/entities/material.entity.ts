@@ -8,6 +8,6 @@ export interface chapter {
 export interface material {
   id: string;
   title: string;
-  content: string[];
-  visualContentUrl: string;
+  content: string[] | string;
+  visual_content_url: string;
 }

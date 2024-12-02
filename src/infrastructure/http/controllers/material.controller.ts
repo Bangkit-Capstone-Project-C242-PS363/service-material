@@ -7,12 +7,14 @@ export class MaterialController {
     try {
       const chapters = await this.materialService.getChapters();
       res.json({
+        error: false,
         message: "Chapter fetched successfully",
-        chapters,
+        data: chapters,
       });
     } catch (error) {
       res.json({
-        error: error.message,
+        error: true,
+        message: error.message,
       });
     }
   };
@@ -26,14 +28,34 @@ export class MaterialController {
         req.params.chapterId,
       );
       res.json({
+        error: false,
         message: "Materials fetched successfully",
-        chapterId: req.params.chapterId,
-        chapterImageUrl,
-        materials,
+        data: {
+          chapterId: req.params.chapterId,
+          chapterImageUrl,
+          materials,
+        },
       });
     } catch (error) {
       res.json({
-        error: error.message,
+        error: true,
+        message: error.message,
+      });
+    }
+  };
+
+  getQuizz = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const quizz = await this.materialService.getQuizz(req.params.chapterId);
+      res.json({
+        error: false,
+        message: "Quizz fetched successfully",
+        data: quizz,
+      });
+    } catch (error) {
+      res.json({
+        error: true,
+        message: error.message,
       });
     }
   };

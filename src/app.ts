@@ -4,11 +4,13 @@ import { MaterialController } from "./infrastructure/http/controllers/material.c
 import { MaterialService } from "./domain/services/material.services";
 import { InMemoryMaterialRepository } from "./infrastructure/repository/in-memory-material.repository";
 import { createQuizRoutes } from "./infrastructure/http/routes/quiz.routes";
+import { PosgresMaterialRepository } from "./infrastructure/repository/posgresql-material.repository";
 
 const app = express();
 app.use(express.json());
 
-const materialRepository = new InMemoryMaterialRepository();
+// const materialRepository = new InMemoryMaterialRepository();
+const materialRepository = new PosgresMaterialRepository();
 const materialService = new MaterialService(materialRepository);
 const materialController = new MaterialController(materialService);
 app.use("/materials", createMaterialRoutes(materialController));
