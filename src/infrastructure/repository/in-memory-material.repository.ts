@@ -15,7 +15,6 @@ export class InMemoryMaterialRepository implements MaterialRepository {
     title: faker.lorem.sentence(),
     description: faker.lorem.paragraph(),
     iconUrl: faker.image.url(),
-    imageUrl: faker.image.url(),
   }));
 
   async getChapters(): Promise<chapter[]> {
@@ -24,5 +23,9 @@ export class InMemoryMaterialRepository implements MaterialRepository {
 
   async getMaterials(chapterId: string): Promise<material[]> {
     return this.materials;
+  }
+
+  async getChapterImageUrl(chapterId: string): Promise<string> {
+    return faker.image.url();
   }
 }

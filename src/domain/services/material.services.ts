@@ -11,4 +11,8 @@ export class MaterialService {
   async getMaterials(chapterId: string): Promise<material[]> {
     return this.materialRepository.getMaterials(chapterId);
   }
+
+  async getChapterImageUrl(chapterId: string): Promise<string> {
+    return this.materialRepository.getChapterImageUrl(chapterId);
+  }
 }

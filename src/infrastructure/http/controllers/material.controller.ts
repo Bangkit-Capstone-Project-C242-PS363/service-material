@@ -22,9 +22,13 @@ export class MaterialController {
       const materials = await this.materialService.getMaterials(
         req.params.chapterId,
       );
+      const chapterImageUrl = await this.materialService.getChapterImageUrl(
+        req.params.chapterId,
+      );
       res.json({
         message: "Materials fetched successfully",
         chapterId: req.params.chapterId,
+        chapterImageUrl,
         materials,
       });
     } catch (error) {

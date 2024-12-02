@@ -3,7 +3,6 @@ export interface chapter {
   title: string;
   description: string;
   iconUrl: string;
-  imageUrl: string;
 }
 
 export interface material {
