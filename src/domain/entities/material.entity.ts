@@ -2,7 +2,7 @@ export interface chapter {
   id: string;
   title: string;
   description: string;
-  iconUrl: string;
+  icon_url: string;
 }
 
 export interface material {
