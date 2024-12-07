@@ -31,12 +31,15 @@ export class MaterialService {
 
   async getQuizz(chapterId: string): Promise<quiz[]> {
     const materials = await this.materialRepository.getMaterials(chapterId);
-    const quiz = materials.map((m: material) => {
-      const wrongAnswers = materials
+    const randomMaterials = materials
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
+    const quiz = randomMaterials.map((m: material) => {
+      const wrongAnswers = randomMaterials
         .filter((mat) => mat.id !== m.id)
         .map((mat) => mat.title)
         .sort(() => Math.random() - 0.5)
-        .slice(0, materials.length >= 4 ? 3 : materials.length - 1);
+        .slice(0, randomMaterials.length >= 4 ? 3 : randomMaterials.length - 1);
 
       const answers = [
         { id: "1", answer: m.title },
