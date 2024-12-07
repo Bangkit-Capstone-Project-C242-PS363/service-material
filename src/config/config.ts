@@ -4,4 +4,5 @@ export const config = {
   DB_NAME: process.env.DB_NAME || "main",
   DB_PASSWORD: process.env.DB_PASSWORD || "letmeiinn",
   DB_PORT: parseInt(process.env.DB_PORT || "5432", 10),
+  FREE_LIMIT: parseInt(process.env.FREE_LIMIT || "2", 10),
 };

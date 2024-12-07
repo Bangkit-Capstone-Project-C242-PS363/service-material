@@ -2,6 +2,7 @@ export interface chapter {
   id: string;
   title: string;
   description: string;
+  locked: boolean;
   icon_url: string;
 }
 

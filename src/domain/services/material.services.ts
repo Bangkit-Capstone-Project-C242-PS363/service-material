@@ -1,3 +1,4 @@
+import { config } from "../../config/config";
 import { chapter, material } from "../entities/material.entity";
 import { quiz } from "../entities/quiz.entity";
 import { MaterialRepository } from "../repositories/material.repositories";
@@ -5,8 +6,28 @@ import { MaterialRepository } from "../repositories/material.repositories";
 export class MaterialService {
   constructor(private materialRepository: MaterialRepository) {}
 
-  async getChapters(): Promise<chapter[]> {
-    return this.materialRepository.getChapters();
+  async getChapters(userId: string | undefined): Promise<chapter[]> {
+    const chapters = await this.materialRepository.getChapters();
+    chapters.map((chapter) => {
+      return (chapter.locked = false);
+    });
+
+    let isSubscribed = false;
+
+    if (userId) {
+      isSubscribed = await this.materialRepository.isSubscribed(userId);
+    }
+
+    if (!isSubscribed) {
+      for (let i = config.FREE_LIMIT; i < chapters.length; i++) {
+        chapters[i].title = "Locked";
+        chapters[i].icon_url =
+          "https://storage.googleapis.com/bucket-asl-data/material-quiz/lock.png";
+        chapters[i].locked = true;
+      }
+    }
+
+    return chapters;
   }
 
   async getMaterials(chapterId: string): Promise<material[]> {

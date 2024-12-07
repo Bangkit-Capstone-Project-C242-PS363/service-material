@@ -47,4 +47,14 @@ export class PosgresMaterialRepository implements MaterialRepository {
       throw new Error(error.message);
     }
   }
+
+  async isSubscribed(userId: string): Promise<boolean> {
+    const query = "SELECT * FROM subscribe WHERE userid = $1";
+    try {
+      const { rows } = await this.pool.query(query, [userId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }

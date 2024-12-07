@@ -28,4 +28,8 @@ export class InMemoryMaterialRepository implements MaterialRepository {
   async getChapterImageUrl(chapterId: string): Promise<string> {
     return faker.image.url();
   }
+
+  async isSubscribed(userId: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
 }
