@@ -20,9 +20,9 @@ export class MaterialService {
 
     if (!isSubscribed) {
       for (let i = config.FREE_LIMIT; i < chapters.length; i++) {
-        chapters[i].title = "Locked";
-        chapters[i].icon_url =
-          "https://storage.googleapis.com/bucket-asl-data/material-quiz/lock.png";
+        // chapters[i].title = "Locked";
+        // chapters[i].icon_url =
+        //   "https://storage.googleapis.com/bucket-asl-data/material-quiz/lock.png";
         chapters[i].locked = true;
       }
     }
