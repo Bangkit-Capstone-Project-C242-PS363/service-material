@@ -3,15 +3,10 @@ import { MaterialService } from "../../../domain/services/material.services";
 
 export class MaterialController {
   constructor(private materialService: MaterialService) {}
+
   getChapters = async (req: Request, res: Response): Promise<void> => {
-    const token = req.headers.authorization?.split(".")[1];
-    let userId;
-    if (!!token) {
-      const json = Buffer.from(token, "base64").toString("utf-8");
-      userId = JSON.parse(json).userId;
-    }
     try {
-      const chapters = await this.materialService.getChapters(userId);
+      const chapters = await this.materialService.getChapters();
       res.json({
         error: false,
         message: "Chapter fetched successfully",
