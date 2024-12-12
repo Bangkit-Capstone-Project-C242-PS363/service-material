@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import { MaterialService } from "../../../domain/services/material.services";
 import { QuizService } from "../../../domain/services/quiz.services";
 
 export class QuizController {
@@ -11,14 +10,19 @@ export class QuizController {
       const json = Buffer.from(token!, "base64").toString("utf-8");
       const userId = JSON.parse(json).userId;
 
-      await this.quizService.setCompleted(userId, req.body.chapterId);
+      await this.quizService.setCompleted(userId, req.body.chapter_id);
       const certificate_url = await this.quizService.getCertificateUrl(userId);
       res.json({
         error: false,
         message: "Chapter completed successfully",
         certificate_url,
       });
-    } catch (error) {}
+    } catch (error) {
+      res.json({
+        error: true,
+        message: error.message,
+      });
+    }
   };
 
   getChapters = async (req: Request, res: Response): Promise<void> => {

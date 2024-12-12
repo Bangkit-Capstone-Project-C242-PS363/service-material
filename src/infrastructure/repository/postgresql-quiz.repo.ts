@@ -23,7 +23,6 @@ export class PostgresQuizRepository implements QuizRepository {
     try {
       const { rows: rows1 } = await this.pool.query(query);
       const { rows: rows2 } = await this.pool.query(query2, [userId]);
-      console.log(rows1, rows2);
       if (rows1.length === 0 || rows2.length === 0) {
         return Promise.resolve(false);
       }

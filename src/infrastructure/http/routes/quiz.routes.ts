@@ -7,6 +7,7 @@ export const createQuizRoutes = (quizController: QuizController): Router => {
 
   router.get("/getChapters", quizController.getChapters);
   router.get("/getQuizz/:chapterId", quizController.getQuizz);
+  router.post("/complete", quizController.setCompleted);
 
   return router;
 };
