@@ -1,13 +1,17 @@
 import { config } from "../../config/config";
 import { material } from "../entities/material.entity";
 import { quiz, quizChapter } from "../entities/quiz.entity";
-import { MaterialRepository } from "../repositories/material.repositories";
 import { QuizRepository } from "../repositories/quiz.repository";
 
 export class QuizService {
   constructor(private quizRepository: QuizRepository) {}
 
+  async setCompleted(userId: string, chapterId: string): Promise<void> {
+    return this.quizRepository.setCompleted(userId, chapterId);
+  }
+
   async getCertificateUrl(userId: string): Promise<string> {
+    const isCompletedAll = await this.quizRepository.isCompletedAll(userId);
     return this.quizRepository.getCertificateUrl(userId);
   }
 

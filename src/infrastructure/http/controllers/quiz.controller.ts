@@ -4,6 +4,23 @@ import { QuizService } from "../../../domain/services/quiz.services";
 
 export class QuizController {
   constructor(private quizService: QuizService) {}
+
+  setCompleted = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const token = req.headers.authorization?.split(".")[1];
+      const json = Buffer.from(token!, "base64").toString("utf-8");
+      const userId = JSON.parse(json).userId;
+
+      await this.quizService.setCompleted(userId, req.body.chapterId);
+      const certificate_url = await this.quizService.getCertificateUrl(userId);
+      res.json({
+        error: false,
+        message: "Chapter completed successfully",
+        certificate_url,
+      });
+    } catch (error) {}
+  };
+
   getChapters = async (req: Request, res: Response): Promise<void> => {
     const token = req.headers.authorization?.split(".")[1];
     let userId;

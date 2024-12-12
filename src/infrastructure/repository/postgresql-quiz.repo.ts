@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import { config } from "../../config/config";
 import { material } from "../../domain/entities/material.entity";
-import { QuizRepository } from "../../domain/repositories/quiz.repository";
 import { quizChapter } from "../../domain/entities/quiz.entity";
+import { QuizRepository } from "../../domain/repositories/quiz.repository";
 
 export class PostgresQuizRepository implements QuizRepository {
   private pool: Pool;
@@ -15,6 +15,31 @@ export class PostgresQuizRepository implements QuizRepository {
       password: config.DB_PASSWORD,
       port: config.DB_PORT,
     });
+  }
+
+  async isCompletedAll(userId: string): Promise<boolean> {
+    const query = `SELECT COUNT(*) as total_chapters FROM chapters`;
+    const query2 = `SELECT COUNT(*) as completed_chapters FROM completed_quiz WHERE user_id = $1`;
+    try {
+      const { rows: rows1 } = await this.pool.query(query);
+      const { rows: rows2 } = await this.pool.query(query2, [userId]);
+      console.log(rows1, rows2);
+      if (rows1.length === 0 || rows2.length === 0) {
+        return Promise.resolve(false);
+      }
+      return rows1[0].total_chapters === rows2[0].completed_chapters;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async setCompleted(userId: string, chapterId: string): Promise<void> {
+    const query = `INSERT INTO completed_quiz (user_id, chapter_id) VALUES ($1, $2)`;
+    try {
+      await this.pool.query(query, [userId, chapterId]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async getCertificateUrl(userId: string): Promise<string> {
