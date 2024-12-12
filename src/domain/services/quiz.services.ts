@@ -12,7 +12,7 @@ export class QuizService {
       chapterId,
     );
     if (isCompleted) {
-      throw new Error(`Chapter ${chapterId} already completed`);
+      return;
     }
     await this.quizRepository.setCompleted(userId, chapterId);
   }
