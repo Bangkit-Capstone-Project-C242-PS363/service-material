@@ -1,13 +1,18 @@
 import { config } from "../../config/config";
-import { chapter, material } from "../entities/material.entity";
-import { quiz } from "../entities/quiz.entity";
+import { material } from "../entities/material.entity";
+import { quiz, quizChapter } from "../entities/quiz.entity";
 import { MaterialRepository } from "../repositories/material.repositories";
+import { QuizRepository } from "../repositories/quiz.repository";
 
 export class QuizService {
-  constructor(private quizRepository: MaterialRepository) {}
+  constructor(private quizRepository: QuizRepository) {}
 
-  async getChapters(userId: string | undefined): Promise<chapter[]> {
-    const chapters = await this.quizRepository.getChapters();
+  async getCertificateUrl(userId: string): Promise<string> {
+    return this.quizRepository.getCertificateUrl(userId);
+  }
+
+  async getChapters(userId: string): Promise<quizChapter[]> {
+    const chapters = await this.quizRepository.getChapters(userId);
     chapters.map((chapter) => {
       return (chapter.locked = false);
     });
@@ -20,9 +25,6 @@ export class QuizService {
 
     if (!isSubscribed) {
       for (let i = config.FREE_LIMIT; i < chapters.length; i++) {
-        // chapters[i].title = "Locked";
-        // chapters[i].icon_url =
-        //   "https://storage.googleapis.com/bucket-asl-data/material-quiz/lock.png";
         chapters[i].locked = true;
       }
     }
@@ -60,7 +62,6 @@ export class QuizService {
       };
     });
 
-    console.log(materials);
     return quiz;
   }
 }

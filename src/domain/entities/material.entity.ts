@@ -1,4 +1,4 @@
-export interface chapter {
+export interface materialChapter {
   id: string;
   title: string;
   description: string;

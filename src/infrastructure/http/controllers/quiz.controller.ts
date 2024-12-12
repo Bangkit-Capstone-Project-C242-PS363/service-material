@@ -13,9 +13,11 @@ export class QuizController {
     }
     try {
       const chapters = await this.quizService.getChapters(userId);
+      const certificate_url = await this.quizService.getCertificateUrl(userId);
       res.json({
         error: false,
         message: "Chapter fetched successfully",
+        certificate_url,
         data: chapters,
       });
     } catch (error) {

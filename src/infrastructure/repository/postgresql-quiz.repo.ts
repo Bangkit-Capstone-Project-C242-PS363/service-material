@@ -1,12 +1,10 @@
 import { Pool } from "pg";
-import { MaterialRepository } from "../../domain/repositories/material.repositories";
 import { config } from "../../config/config";
-import {
-  materialChapter,
-  material,
-} from "../../domain/entities/material.entity";
+import { material } from "../../domain/entities/material.entity";
+import { QuizRepository } from "../../domain/repositories/quiz.repository";
+import { quizChapter } from "../../domain/entities/quiz.entity";
 
-export class PosgresMaterialRepository implements MaterialRepository {
+export class PostgresQuizRepository implements QuizRepository {
   private pool: Pool;
 
   constructor() {
@@ -19,10 +17,36 @@ export class PosgresMaterialRepository implements MaterialRepository {
     });
   }
 
-  async getChapters(): Promise<materialChapter[]> {
-    const query = "SELECT id, title, icon_url FROM chapters";
+  async getCertificateUrl(userId: string): Promise<string> {
+    const query = "SELECT certificate_url FROM certificates WHERE user_id = $1";
     try {
-      const { rows } = await this.pool.query(query);
+      const { rows } = await this.pool.query(query, [userId]);
+      if (rows.length === 0) {
+        return "";
+      }
+      return rows[0].certificate_url;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getChapters(userId: string): Promise<quizChapter[]> {
+    const query = `
+SELECT 
+    c.id,
+    c.title,
+    c.icon_url,
+    CASE 
+        WHEN cq.chapter_id IS NOT NULL THEN true 
+        ELSE false 
+    END as completed
+FROM chapters c
+LEFT JOIN completed_quiz cq 
+    ON c.id = cq.chapter_id 
+    AND cq.user_id = $1
+      `;
+    try {
+      const { rows } = await this.pool.query(query, [userId]);
       rows.sort((a: material, b: material) => a.id > b.id);
       return rows;
     } catch (error) {
