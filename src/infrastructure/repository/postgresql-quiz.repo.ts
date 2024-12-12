@@ -17,6 +17,16 @@ export class PostgresQuizRepository implements QuizRepository {
     });
   }
 
+  async isCompleted(userId: string, chapterId: string): Promise<boolean> {
+    const query = `SELECT * FROM completed_quiz WHERE user_id = $1 AND chapter_id = $2`;
+    try {
+      const { rows } = await this.pool.query(query, [userId, chapterId]);
+      return rows.length > 0;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async isCompletedAll(userId: string): Promise<boolean> {
     const query = `SELECT COUNT(*) as total_chapters FROM chapters`;
     const query2 = `SELECT COUNT(*) as completed_chapters FROM completed_quiz WHERE user_id = $1`;

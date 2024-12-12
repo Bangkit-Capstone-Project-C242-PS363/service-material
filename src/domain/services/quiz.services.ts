@@ -7,7 +7,14 @@ export class QuizService {
   constructor(private quizRepository: QuizRepository) {}
 
   async setCompleted(userId: string, chapterId: string): Promise<void> {
-    return this.quizRepository.setCompleted(userId, chapterId);
+    const isCompleted = await this.quizRepository.isCompleted(
+      userId,
+      chapterId,
+    );
+    if (isCompleted) {
+      throw new Error(`Chapter ${chapterId} already completed`);
+    }
+    await this.quizRepository.setCompleted(userId, chapterId);
   }
 
   async getCertificateUrl(userId: string): Promise<string> {

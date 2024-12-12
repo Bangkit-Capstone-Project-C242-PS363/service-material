@@ -6,6 +6,7 @@ export interface QuizRepository {
   getMaterials(chapterId: string): Promise<any>;
   getChapterImageUrl(chapterId: string): Promise<string>;
   setCompleted(userId: string, chapterId: string): Promise<void>;
+  isCompleted(userId: string, chapterId: string): Promise<boolean>;
   isCompletedAll(userId: string): Promise<boolean>;
   isSubscribed(userId: string): Promise<boolean>;
 }
