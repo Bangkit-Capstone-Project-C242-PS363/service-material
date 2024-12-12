@@ -1,4 +1,5 @@
 import { config } from "../../config/config";
+import { generateCert } from "../../helper/generate-cert";
 import { material } from "../entities/material.entity";
 import { quiz, quizChapter } from "../entities/quiz.entity";
 import { QuizRepository } from "../repositories/quiz.repository";
@@ -19,7 +20,18 @@ export class QuizService {
 
   async getCertificateUrl(userId: string): Promise<string> {
     const isCompletedAll = await this.quizRepository.isCompletedAll(userId);
-    return this.quizRepository.getCertificateUrl(userId);
+
+    if (!isCompletedAll) {
+      return "";
+    }
+
+    try {
+      const username = await this.quizRepository.getUsername(userId);
+      const certificateUrl = await generateCert(username);
+      await this.quizRepository.setCertificateUrl(userId, certificateUrl);
+      return this.quizRepository.getCertificateUrl(userId);
+    } catch (error) {}
+    throw new Error("Failed to generate certificate");
   }
 
   async getChapters(userId: string): Promise<quizChapter[]> {

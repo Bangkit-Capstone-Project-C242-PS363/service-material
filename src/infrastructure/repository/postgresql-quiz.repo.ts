@@ -51,6 +51,28 @@ export class PostgresQuizRepository implements QuizRepository {
     }
   }
 
+  async getUsername(userId: string): Promise<string> {
+    const query = "SELECT username FROM users WHERE id = $1";
+    try {
+      const { rows } = await this.pool.query(query, [userId]);
+      if (rows.length === 0) {
+        throw new Error("User not found");
+      }
+      return rows[0].username;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async setCertificateUrl(userId: string, url: string): Promise<void> {
+    const query = `INSERT INTO certificates (user_id, certificate_url) VALUES ($1, $2)`;
+    try {
+      await this.pool.query(query, [userId, url]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async getCertificateUrl(userId: string): Promise<string> {
     const query = "SELECT certificate_url FROM certificates WHERE user_id = $1";
     try {
