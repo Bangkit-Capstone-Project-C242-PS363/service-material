@@ -18,7 +18,7 @@ export const generateCert = async (userName: string) => {
     }
 
     const data = await response.json();
-    return data["certificat_url"];
+    return data["certificate_url"];
   } catch (error) {
     console.error("Error:", error);
     return "";
