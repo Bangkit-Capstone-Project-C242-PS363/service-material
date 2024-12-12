@@ -3,6 +3,7 @@ export interface materialChapter {
   title: string;
   description: string;
   locked: boolean;
+  saved: boolean;
   icon_url: string;
 }
 

@@ -6,6 +6,14 @@ import { MaterialRepository } from "../repositories/material.repositories";
 export class MaterialService {
   constructor(private materialRepository: MaterialRepository) {}
 
+  async setBookmark(userId: string, chapterId: string): Promise<void> {
+    await this.materialRepository.setBookmark(userId, chapterId);
+  }
+
+  async deleteBookmark(userId: string, chapterId: string): Promise<void> {
+    await this.materialRepository.deleteBookmark(userId, chapterId);
+  }
+
   async getChapters(): Promise<materialChapter[]> {
     const chapters = await this.materialRepository.getChapters();
     chapters.map((chapter) => {

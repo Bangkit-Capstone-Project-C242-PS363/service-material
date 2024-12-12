@@ -8,6 +8,8 @@ export const createMaterialRoutes = (
 
   router.get("/getChapters", materialController.getChapters);
   router.get("/getMaterials/:chapterId", materialController.getMaterials);
+  router.post("/bookmark", materialController.setBookmark);
+  router.delete("/bookmark", materialController.removeBookmark);
 
   return router;
 };

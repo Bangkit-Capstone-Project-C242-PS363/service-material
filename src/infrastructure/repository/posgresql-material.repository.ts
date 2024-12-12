@@ -19,10 +19,43 @@ export class PosgresMaterialRepository implements MaterialRepository {
     });
   }
 
-  async getChapters(): Promise<materialChapter[]> {
-    const query = "SELECT id, title, icon_url FROM chapters";
+  async setBookmark(userId: string, chapterId: string): Promise<void> {
+    const query =
+      "INSERT INTO bookmark_materials (user_id, chapter_id) VALUES ($1, $2)";
     try {
-      const { rows } = await this.pool.query(query);
+      await this.pool.query(query, [userId, chapterId]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async deleteBookmark(userId: string, chapterId: string): Promise<void> {
+    const query =
+      "DELETE FROM bookmark_materials WHERE user_id = $1 AND chapter_id = $2";
+    try {
+      await this.pool.query(query, [userId, chapterId]);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getChapters(userId: string): Promise<materialChapter[]> {
+    const query = `
+      SELECT 
+        c.id, 
+        c.title, 
+        c.icon_url,
+        CASE 
+          WHEN b.user_id IS NOT NULL THEN true 
+          ELSE false 
+        END as saved
+      FROM chapters c
+      LEFT JOIN bookmark_materials b ON c.id = b.chapter_id 
+        AND b.user_id = $1
+      ORDER BY c.id`;
+
+    try {
+      const { rows } = await this.pool.query(query, [userId]);
       rows.sort((a: material, b: material) => a.id > b.id);
       return rows;
     } catch (error) {

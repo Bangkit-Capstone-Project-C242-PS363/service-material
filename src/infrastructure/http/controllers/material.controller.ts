@@ -4,9 +4,60 @@ import { MaterialService } from "../../../domain/services/material.services";
 export class MaterialController {
   constructor(private materialService: MaterialService) {}
 
-  getChapters = async (req: Request, res: Response): Promise<void> => {
+  setBookmark = async (req: Request, res: Response): Promise<void> => {
+    const token = req.headers.authorization?.split(".")[1];
+    let userId;
+    if (!!token) {
+      const json = Buffer.from(token, "base64").toString("utf-8");
+      userId = JSON.parse(json).userId;
+    }
+
     try {
-      const chapters = await this.materialService.getChapters();
+      await this.materialService.setBookmark(userId, req.body.chapter_id);
+      res.json({
+        error: false,
+        message: "Bookmark set successfully",
+      });
+    } catch (error) {
+      res.json({
+        error: true,
+        message: error.message,
+      });
+    }
+  };
+
+  removeBookmark = async (req: Request, res: Response): Promise<void> => {
+    const token = req.headers.authorization?.split(".")[1];
+    let userId;
+    if (!!token) {
+      const json = Buffer.from(token, "base64").toString("utf-8");
+      userId = JSON.parse(json).userId;
+    }
+
+    try {
+      await this.materialService.deleteBookmark(userId, req.body.chapter_id);
+      res.json({
+        error: false,
+        message: "Bookmark deleted successfully",
+      });
+    } catch (error) {
+      res.json({
+        error: true,
+        message: error.message,
+      });
+    }
+  };
+
+  getChapters = async (req: Request, res: Response): Promise<void> => {
+    const token = req.headers.authorization?.split(".")[1];
+    let userId;
+    if (!!token) {
+      const json = Buffer.from(token, "base64").toString("utf-8");
+      userId = JSON.parse(json).userId;
+    }
+
+    try {
+      const chapters = await this.materialService.getChapters(userId);
       res.json({
         error: false,
         message: "Chapter fetched successfully",
